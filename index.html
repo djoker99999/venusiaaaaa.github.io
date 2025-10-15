@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🃏 Le Joker Magique - Édition Manga !</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      padding: 10px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    body {
+      filter: brightness(1.1) contrast(1.1);
+    }
+
+    .game-container {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      border: 2px solid rgba(139, 69, 19, 0.5);
+    }
+
+    .game-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #8B4513, #D2691E, #228B22, #8B4513);
+      border-radius: 22px;
+      z-index: -1;
+      animation: borderGlow 3s linear infinite;
+    }
+
+    @keyframes borderGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      background: linear-gradient(45deg, #8B4513, #D2691E);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .instructions {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .instructions h2 {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      background: linear-gradient(45deg, #8B4513, #D2691E);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .instructions p {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #D2691E;
+    }
+
+    .log-container {
+      position: relative;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: 200px;
+    }
+
+    .joker {
+      width: 200px;
+      height: 180px;
+      margin: 0 auto;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: relative;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 15px rgba(139, 69, 19, 0.7));
+      z-index: 5;
+    }
+
+    .joker.noob {
+      filter: drop-shadow(0 0 15px rgba(135, 206, 235, 0.7)) brightness(1.2);
+    }
+
+    .joker.buchette {
+      filter: drop-shadow(0 0 15px rgba(218, 112, 214, 0.7)) brightness(1.1);
+    }
+
+    .joker.easy {
+      filter: drop-shadow(0 0 15px rgba(0, 255, 0, 0.7)) brightness(1.1);
+    }
+
+    .joker.medium {
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) brightness(1.1) hue-rotate(15deg);
+    }
+
+    .joker.hard {
+      filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8)) brightness(1.1) hue-rotate(330deg);
+      animation: redGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes redGlow {
+      0% { filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8)) brightness(1.1) hue-rotate(330deg); }
+      100% { filter: drop-shadow(0 0 35px rgba(255, 50, 50, 1)) brightness(1.3) hue-rotate(320deg); }
+    }
+
+    .joker.hit {
+      animation: lightHit 0.4s ease-out;
+    }
+
+    .joker.heavy-hit {
+      animation: heavyHit 0.6s ease-out;
+    }
+
+    .joker.critical-hit {
+      animation: criticalHit 0.8s ease-out;
+    }
+
+    .joker.mega-hit {
+      animation: megaHit 1.2s ease-out;
+    }
+
+    .joker.ultra-hit {
+      animation: ultraHit 1.5s ease-out;
+    }
+
+    .joker.cracked {
+      filter: brightness(0.7) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+      animation: redPulse 1s infinite;
+    }
+
+    .joker.broken {
+      opacity: 0.3;
+      filter: grayscale(100%) brightness(0.3);
+      animation: knockout 1.5s ease-out forwards;
+    }
+
+    @keyframes lightHit {
+      0% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-10px) rotate(-5deg); }
+      50% { transform: translateX(5px) rotate(3deg); }
+      75% { transform: translateX(-3px) rotate(-2deg); }
+      100% { transform: translateX(0) rotate(0deg); }
+    }
+
+    @keyframes heavyHit {
+      0% { transform: translateX(0) rotate(0deg) scale(1); }
+      20% { transform: translateX(-15px) rotate(-10deg) scale(0.95); }
+      40% { transform: translateX(8px) rotate(5deg) scale(1.05); }
+      60% { transform: translateX(-4px) rotate(-3deg) scale(0.98); }
+      80% { transform: translateX(2px) rotate(2deg) scale(1.02); }
+      100% { transform: translateX(0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes criticalHit {
+      0% { transform: translateX(0) rotate(0deg) scale(1); }
+      15% { transform: translateX(-20px) rotate(-15deg) scale(0.9); }
+      30% { transform: translateX(12px) rotate(10deg) scale(1.1); }
+      45% { transform: translateX(-8px) rotate(-6deg) scale(0.95); }
+      60% { transform: translateX(5px) rotate(4deg) scale(1.05); }
+      75% { transform: translateX(-3px) rotate(-2deg) scale(0.98); }
+      90% { transform: translateX(1px) rotate(1deg) scale(1.02); }
+      100% { transform: translateX(0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes megaHit {
+      0% { transform: translateX(0) rotate(0deg) scale(1); }
+      10% { transform: translateX(-25px) rotate(-20deg) scale(0.85); }
+      20% { transform: translateX(15px) rotate(12deg) scale(1.15); }
+      30% { transform: translateX(-12px) rotate(-8deg) scale(0.9); }
+      40% { transform: translateX(8px) rotate(6deg) scale(1.1); }
+      50% { transform: translateX(-6px) rotate(-4deg) scale(0.95); }
+      60% { transform: translateX(4px) rotate(3deg) scale(1.05); }
+      70% { transform: translateX(-2px) rotate(-2deg) scale(0.98); }
+      80% { transform: translateX(1px) rotate(1deg) scale(1.02); }
+      90% { transform: translateX(-0.5px) rotate(-0.5deg) scale(0.99); }
+      100% { transform: translateX(0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes ultraHit {
+      0% { transform: translateX(0) rotate(0deg) scale(1); }
+      8% { transform: translateX(-30px) rotate(-25deg) scale(0.8); }
+      16% { transform: translateX(20px) rotate(15deg) scale(1.2); }
+      24% { transform: translateX(-15px) rotate(-12deg) scale(0.85); }
+      32% { transform: translateX(12px) rotate(10deg) scale(1.15); }
+      40% { transform: translateX(-8px) rotate(-8deg) scale(0.9); }
+      48% { transform: translateX(6px) rotate(5deg) scale(1.1); }
+      56% { transform: translateX(-4px) rotate(-4deg) scale(0.95); }
+      64% { transform: translateX(3px) rotate(3deg) scale(1.05); }
+      72% { transform: translateX(-2px) rotate(-2deg) scale(0.98); }
+      80% { transform: translateX(1px) rotate(1deg) scale(1.02); }
+      88% { transform: translateX(-0.5px) rotate(-0.5deg) scale(0.99); }
+      96% { transform: translateX(0.3px) rotate(0.3deg) scale(1.01); }
+      100% { transform: translateX(0) rotate(0deg) scale(1); }
+    }
+
+    @keyframes knockout {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      30% { transform: translateY(-10px) rotate(-15deg) scale(0.95); opacity: 0.9; }
+      70% { transform: translateY(40px) rotate(-90deg) scale(0.8); opacity: 0.7; }
+      100% { transform: translateY(60px) rotate(-90deg) scale(0.7); opacity: 0.4; }
+    }
+
+    @keyframes redPulse {
+      0%, 100% { filter: brightness(0.7) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8)); }
+      50% { filter: brightness(0.5) drop-shadow(0 0 25px rgba(255, 0, 0, 1)); }
+    }
+
+    .screen-shake {
+      animation: screenShake 0.4s ease-out;
+    }
+
+    .mega-shake {
+      animation: megaShake 0.8s ease-out;
+    }
+
+    .ultra-shake {
+      animation: ultraShake 1.2s ease-out;
+    }
+
+    @keyframes screenShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    @keyframes megaShake {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      10% { transform: translateX(-5px) translateY(-2px); }
+      20% { transform: translateX(5px) translateY(2px); }
+      30% { transform: translateX(-4px) translateY(-1px); }
+      40% { transform: translateX(4px) translateY(1px); }
+      50% { transform: translateX(-3px) translateY(-1px); }
+      60% { transform: translateX(3px) translateY(1px); }
+      70% { transform: translateX(-2px) translateY(-0.5px); }
+      80% { transform: translateX(2px) translateY(0.5px); }
+    }
+
+    @keyframes ultraShake {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      5% { transform: translateX(-8px) translateY(-3px); }
+      10% { transform: translateX(8px) translateY(3px); }
+      15% { transform: translateX(-6px) translateY(-2px); }
+      20% { transform: translateX(6px) translateY(2px); }
+      25% { transform: translateX(-4px) translateY(-1px); }
+      30% { transform: translateX(4px) translateY(1px); }
+      35% { transform: translateX(-3px) translateY(-1px); }
+      40% { transform: translateX(3px) translateY(1px); }
+      45% { transform: translateX(-2px) translateY(-0.5px); }
+      50% { transform: translateX(2px) translateY(0.5px); }
+      55% { transform: translateX(-1px) translateY(-0.2px); }
+      60% { transform: translateX(1px) translateY(0.2px); }
+    }
+
+    .impact-effect {
+      position: absolute;
+      font-size: 2em;
+      pointer-events: none;
+      z-index: 3;
+      animation: impactPop 1s ease-out forwards;
+      opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
+    }
+
+    @keyframes impactPop {
+      0% { opacity: 0; transform: scale(0.3) translateY(0); }
+      30% { opacity: 1; transform: scale(1.3) translateY(-10px); }
+      100% { opacity: 0; transform: scale(1) translateY(-30px); }
+    }
+
+    /* Styles pour la hache */
+    .axe {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: bottom center;
+    }
+
+    .axe-head {
+      position: absolute;
+      width: 35px;
+      height: 25px;
+      background: linear-gradient(45deg, #C0C0C0, #E5E5E5, #C0C0C0);
+      clip-path: polygon(0% 50%, 30% 0%, 100% 30%, 100% 70%, 30% 100%);
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .axe-handle {
+      position: absolute;
+      width: 8px;
+      height: 50px;
+      background: linear-gradient(to bottom, #8B4513, #654321);
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .axe-hit {
+      animation: axeSwing 0.6s ease-out forwards;
+    }
+
+    @keyframes axeSwing {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -100%) rotate(-35deg) scale(0.8);
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -100%) rotate(15deg) scale(1);
+      }
+      40% {
+        transform: translate(-50%, -100%) rotate(-10deg) scale(1.1);
+      }
+      60% {
+        transform: translate(-50%, -100%) rotate(5deg) scale(1);
+      }
+      80% {
+        transform: translate(-50%, -100%) rotate(-2deg) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -100%) rotate(0deg) scale(0.8);
+      }
+    }
+
+    .attack-modes {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .attack-mode-image {
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      position: relative;
+    }
+
+    .attack-mode-image:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .attack-mode-image.active {
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .attack-mode-image img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+    }
+
+    .attack-mode-label {
+      font-size: 10px;
+      margin-top: 3px;
+      font-weight: bold;
+      color: #feca57;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .controls {
+      margin: 15px 0;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(45deg, #8B4513, #654321);
+      color: #fff;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(45deg, #D2691E, #8B4513);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #resetBtn {
+      background: linear-gradient(45deg, #555, #777);
+    }
+
+    #resetBtn:hover {
+      background: linear-gradient(45deg, #777, #999);
+    }
+
+    #message {
+      margin: 15px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      min-height: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .result-box {
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.95), rgba(210, 105, 30, 0.95));
+      padding: 20px;
+      border-radius: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(15px);
+      animation: fadeInUp 0.5s ease;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .coins-display {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, #8B4513, #D2691E);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-weight: bold;
+      animation: coinPop 1s ease;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    @keyframes coinPop {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(15px) scale(0.5);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-8px) scale(1.1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-25px) scale(1);
+      }
+    }
+
+    .combo-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(45deg, #8B4513, #654321);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9em;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .reward-image {
+      width: 120px;
+      height: 120px;
+      margin: 10px auto;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .difficulty-selector {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .difficulty-btn {
+      width: 80px;
+      height: 90px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .difficulty-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
+    }
+
+    .difficulty-btn img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+      margin-bottom: 4px;
+    }
+
+    .difficulty-btn-label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #feca57;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+      text-align: center;
+    }
+
+    .difficulty-btn.noob .difficulty-btn-label {
+      color: #87CEEB;
+    }
+
+    .difficulty-btn.buchette .difficulty-btn-label {
+      color: #DDA0DD;
+    }
+
+    .difficulty-btn.easy .difficulty-btn-label {
+      color: #4CAF50;
+    }
+
+    .difficulty-btn.medium .difficulty-btn-label {
+      color: #FF9800;
+    }
+
+    .difficulty-btn.hard .difficulty-btn-label {
+      color: #F44336;
+    }
+
+    .difficulty-btn:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .difficulty-btn.active {
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      transform: scale(1.08);
+      background: rgba(255, 215, 0, 0.1);
+    }
+
+    /* Styles pour mobile */
+    @media (max-width: 480px) {
+      .game-container {
+        padding: 15px;
+        margin: 5px;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .joker {
+        width: 160px;
+        height: 140px;
+      }
+      
+      .instructions {
+        padding: 10px;
+        margin: 15px 0;
+      }
+      
+      .instructions h2 {
+        font-size: 1.3em;
+      }
+      
+      .instructions p {
+        font-size: 1em;
+      }
+      
+      .attack-modes {
+        gap: 5px;
+      }
+
+      .attack-mode-image {
+        width: 60px;
+        height: 60px;
+      }
+
+      .attack-mode-image img {
+        width: 35px;
+        height: 35px;
+      }
+
+      .attack-mode-label {
+        font-size: 9px;
+      }
+      
+      button {
+        padding: 10px 20px;
+        font-size: 13px;
+        margin: 5px;
+      }
+      
+      .difficulty-btn {
+        width: 70px;
+        height: 80px;
+      }
+      
+      .difficulty-btn img {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .difficulty-btn-label {
+        font-size: 9px;
+      }
+      
+      .reward-image {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    /* Effets de particules */
+    .particles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #D2691E;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Styles améliorés pour la fin du jeu */
+    .victory-message {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #D2691E;
+      text-shadow: 0 0 10px rgba(210, 105, 30, 0.7);
+    }
+
+    .reward-text {
+      font-size: 1.3em;
+      margin: 10px 0;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .difficulty-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .difficulty-badge.noob {
+      background: linear-gradient(45deg, #87CEEB, #B0E0E6);
+      color: #000;
+    }
+
+    .difficulty-badge.buchette {
+      background: linear-gradient(45deg, #DDA0DD, #DA70D6);
+    }
+
+    .difficulty-badge.easy {
+      background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    }
+
+    .difficulty-badge.medium {
+      background: linear-gradient(45deg, #FF9800, #FFC107);
+    }
+
+    .difficulty-badge.hard {
+      background: linear-gradient(45deg, #F44336, #E91E63);
+    }
+
+    /* Styles pour les statistiques */
+    .stats-container {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      padding: 15px;
+      margin: 15px 0;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stats-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #D2691E;
+      font-weight: bold;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat-item {
+      text-align: left;
+      padding: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    .stat-value {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .save-indicator {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #4CAF50;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+
+    .save-indicator.show {
+      opacity: 1;
+    }
+    
+    /* Indicateur de difficulté */
+    .difficulty-indicator {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin: 10px 0;
+      padding: 8px 15px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    
+    .difficulty-indicator.noob {
+      background: rgba(135, 206, 235, 0.2);
+      border: 1px solid rgba(135, 206, 235, 0.5);
+      color: #87CEEB;
+    }
+    
+    .difficulty-indicator.buchette {
+      background: rgba(218, 112, 214, 0.2);
+      border: 1px solid rgba(218, 112, 214, 0.5);
+      color: #DDA0DD;
+    }
+    
+    .difficulty-indicator.easy {
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.5);
+      color: #4CAF50;
+    }
+    
+    .difficulty-indicator.medium {
+      background: rgba(255, 152, 0, 0.2);
+      border: 1px solid rgba(255, 152, 0, 0.5);
+      color: #FF9800;
+    }
+    
+    .difficulty-indicator.hard {
+      background: rgba(244, 67, 54, 0.2);
+      border: 1px solid rgba(244, 67, 54, 0.5);
+      color: #F44336;
+      animation: hardIndicatorPulse 2s infinite;
+    }
+    
+    @keyframes hardIndicatorPulse {
+      0%, 100% { box-shadow: 0 0 5px rgba(244, 67, 54, 0.5); }
+      50% { box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
+    }
+
+    /* Nouveau style pour le message d'avertissement */
+    .damage-warning {
+      margin: 10px 0;
+      padding: 10px 15px;
+      background: rgba(255, 0, 0, 0.2);
+      border: 1px solid rgba(255, 0, 0, 0.5);
+      border-radius: 15px;
+      color: #ff6b6b;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+      animation: warningPulse 2s infinite;
+      display: none;
+    }
+
+    @keyframes warningPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Styles pour le sélecteur d'apparence du Joker */
+    .joker-selector {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .joker-btn {
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .joker-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
+    }
+
+    .joker-btn img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+    }
+
+    .joker-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .joker-btn.active {
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      transform: scale(1.05);
+      background: rgba(255, 215, 0, 0.1);
+    }
+
+    /* Styles pour le texte manga */
+    .manga-text {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      letter-spacing: 1px;
+    }
+
+    .manga-title {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      background: linear-gradient(45deg, #ff0000, #ff9900, #ffff00, #ff9900, #ff0000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s linear infinite;
+    }
+
+    @keyframes titleGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .manga-subtitle {
+      font-size: 1.5em;
+      margin-bottom: 8px;
+      background: linear-gradient(45deg, #ff0000, #ff9900);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .manga-instructions {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ff9900;
+      text-shadow: 0 0 5px rgba(255, 153, 0, 0.7);
+    }
+
+    /* Styles pour les GIFs du Joker */
+    .joker-gif {
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="save-indicator" id="saveIndicator">Sauvegarde...</div>
+  
+  <div class="game-container" id="gameContainer">
+    <div class="combo-indicator" id="comboIndicator">COMBO x0</div>
+
+    <h1 class="manga-title">🃏 Le Joker Magique - Édition Manga !</h1>
+    
+    <div class="joker-selector">
+      <div class="joker-btn active" data-joker="1">
+        <img src="https://i.gifer.com/ZJFD.gif" alt="Joker 1">
+      </div>
+      <div class="joker-btn" data-joker="2">
+        <img src="https://i.gifer.com/ZMQt.gif" alt="Joker 2">
+      </div>
+      <div class="joker-btn" data-joker="3">
+        <img src="https://i.gifer.com/4dg6.gif" alt="Joker 3">
+      </div>
+      <div class="joker-btn" data-joker="4">
+        <img src="https://i.gifer.com/4M4x.gif" alt="Joker 4">
+      </div>
+      <div class="joker-btn" data-joker="5">
+        <img src="https://i.gifer.com/YKcP.gif" alt="Joker 5">
+      </div>
+      <div class="joker-btn" data-joker="6">
+        <img src="https://i.gifer.com/ZbpB.gif" alt="Joker 6">
+      </div>
+      <div class="joker-btn" data-joker="7">
+        <img src="https://i.gifer.com/5Mys.gif" alt="Joker 7">
+      </div>
+      <div class="joker-btn" data-joker="8">
+        <img src="https://i.gifer.com/2r6C.gif" alt="Joker 8">
+      </div>
+      <div class="joker-btn" data-joker="9">
+        <img src="https://i.gifer.com/YAS0.gif" alt="Joker 9">
+      </div>
+      <div class="joker-btn" data-joker="10">
+        <img src="https://i.gifer.com/5Mz6.gif" alt="Joker 10">
+      </div>
+      <div class="joker-btn" data-joker="11">
+        <img src="https://i.gifer.com/QnA7.gif" alt="Joker 11">
+      </div>
+      <div class="joker-btn" data-joker="12">
+        <img src="https://i.gifer.com/3gXw.gif" alt="Joker 12">
+      </div>
+      <div class="joker-btn" data-joker="13">
+        <img src="https://i.gifer.com/YTqY.gif" alt="Joker 13">
+      </div>
+    </div>
+    
+    <div class="difficulty-selector">
+      <div class="difficulty-btn noob active" data-difficulty="noob">
+        <img src="https://i.ibb.co/gFMBxFzP/IMG-6063.png" alt="Noob">
+        <div class="difficulty-btn-label">Noob</div>
+      </div>
+      <div class="difficulty-btn buchette" data-difficulty="buchette">
+        <img src="https://i.ibb.co/JMPfpWV/IMG-5851.png" alt="Buchette">
+        <div class="difficulty-btn-label">Buchette</div>
+      </div>
+      <div class="difficulty-btn easy" data-difficulty="easy">
+        <img src="https://i.ibb.co/p6s7HT5n/IMG-7322.png" alt="Facile">
+        <div class="difficulty-btn-label">Facile</div>
+      </div>
+      <div class="difficulty-btn medium" data-difficulty="medium">
+        <img src="https://i.ibb.co/hxXnkQh7/IMG-5861.png" alt="Moyen">
+        <div class="difficulty-btn-label">Moyen</div>
+      </div>
+      <div class="difficulty-btn hard" data-difficulty="hard">
+        <img src="https://i.ibb.co/DHBNtX7t/IMG-6573.png" alt="Difficile">
+        <div class="difficulty-btn-label">Difficile</div>
+      </div>
+    </div>
+    
+    <div class="log-container">
+      <div class="joker easy" id="joker"></div>
+      <div class="particles-container" id="particlesContainer"></div>
+    </div>
+
+    <!-- Nouveau message d'avertissement pour les dégâts -->
+    <div id="damageWarning" class="damage-warning">
+      ⚠️ Le Joker a pris beaucoup de dégâts, il commence à se fissurer !
+    </div>
+
+    <div class="instructions">
+      <h2 class="manga-subtitle">🪓 Frappe le Joker et Gagne le Trésor ! 🪓</h2>
+      <p class="manga-instructions">Un Coup de Hache = Un Point de Vie en Moins</p>
+    </div>
+
+    <div id="difficultyIndicator" class="difficulty-indicator easy">Niveau Facile</div>
+
+    <div class="stats-container">
+      <div class="stats-title">📊 Statistiques de Jeu</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">Jokers vaincus:</div>
+          <div class="stat-value" id="totalJokers">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Record combo:</div>
+          <div class="stat-value" id="maxCombo">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="attack-modes">
+      <div id="mode1" class="attack-mode-image active">
+        <img src="https://i.ibb.co/WNXDxn2y/IMG-7354-Photoroom.png" alt="Rose - 1 coup">
+        <div class="attack-mode-label">1 coup</div>
+      </div>
+      <div id="mode10" class="attack-mode-image">
+        <img src="https://i.ibb.co/7JsBRrCn/IMG-5885.png" alt="Rosa - 10 coups">
+        <div class="attack-mode-label">10 coups</div>
+      </div>
+      <div id="mode30" class="attack-mode-image">
+        <img src="https://i.ibb.co/8DMJ0cxy/IMG-7355-Photoroom.png" alt="Donuts - 30 coups">
+        <div class="attack-mode-label">30 coups</div>
+      </div>
+      <div id="mode100" class="attack-mode-image">
+        <img src="https://i.ibb.co/C5M6DHcS/IMG-7356-Photoroom.png" alt="Coeurs - 100 coups">
+        <div class="attack-mode-label">100 coups</div>
+      </div>
+      <div id="mode500" class="attack-mode-image">
+        <img src="https://i.ibb.co/nNy17WfL/IMG-6065.png" alt="Mini Gun - 500 coups">
+        <div class="attack-mode-label">500 coups</div>
+      </div>
+      <div id="mode1000" class="attack-mode-image">
+        <img src="https://i.ibb.co/JMPfpWV/IMG-5851.png" alt="Galaxie - 1000 coups">
+        <div class="attack-mode-label">1000 coups</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="attackBtn">Attaquer (1 coup)</button>
+      <button id="resetBtn">Nouveau Joker</button>
+      <button id="saveBtn">Sauvegarder</button>
+    </div>
+
+    <div id="resultContainer" class="hidden result-box">
+      <h3 class="manga-subtitle">🎉 Joker Vaincu ! 🎉</h3>
+      <div id="rewardImage" class="reward-image"></div>
+      <p id="coinsResult" class="reward-text"></p>
+      <div id="victoryMessage" class="victory-message"></div>
+      <button id="continueBtn">Continuer</button>
+    </div>
+  </div>
+
+  <script>
+    // Variables de jeu
+    let maxHP, currentHP, coupCounter, totalHits;
+    let hitsUntilCoin = 4;
+    let attackMode = 1;
+    let coinsEarnedThisLog = 0;
+    let combo = 0;
+    let lastHitTime = 0;
+    let isAttacking = false;
+    let audioContext = null;
+    let currentDifficulty = "noob";
+    let damageWarningShown = false;
+    let currentJoker = 1;
+
+    // Variables de sauvegarde
+    let totalJokersDefeated = 0;
+    let maxCombo = 0;
+
+    // Éléments DOM
+    const joker = document.getElementById("joker");
+    const difficultyIndicator = document.getElementById("difficultyIndicator");
+    const attackBtn = document.getElementById("attackBtn");
+    const resultContainer = document.getElementById("resultContainer");
+    const coinsResult = document.getElementById("coinsResult");
+    const victoryMessage = document.getElementById("victoryMessage");
+    const gameContainer = document.getElementById("gameContainer");
+    const comboIndicator = document.getElementById("comboIndicator");
+    const rewardImage = document.getElementById("rewardImage");
+    const particlesContainer = document.getElementById("particlesContainer");
+    const saveIndicator = document.getElementById("saveIndicator");
+    const saveBtn = document.getElementById("saveBtn");
+    const continueBtn = document.getElementById("continueBtn");
+    const damageWarning = document.getElementById("damageWarning");
+    
+    // Éléments de statistiques
+    const totalJokersElement = document.getElementById("totalJokers");
+    const maxComboElement = document.getElementById("maxCombo");
+
+    const impactEffects = ["💥", "🔥", "⭐", "💫", "✨", "💢", "🪓", "🃏"];
+
+    // GIFs du Joker
+    const jokerGifs = [
+      "https://i.gifer.com/ZJFD.gif",
+      "https://i.gifer.com/ZMQt.gif",
+      "https://i.gifer.com/4dg6.gif",
+      "https://i.gifer.com/4M4x.gif",
+      "https://i.gifer.com/YKcP.gif",
+      "https://i.gifer.com/ZbpB.gif",
+      "https://i.gifer.com/5Mys.gif",
+      "https://i.gifer.com/2r6C.gif",
+      "https://i.gifer.com/YAS0.gif",
+      "https://i.gifer.com/5Mz6.gif",
+      "https://i.gifer.com/QnA7.gif",
+      "https://i.gifer.com/3gXw.gif",
+      "https://i.gifer.com/YTqY.gif"
+    ];
+
+    // Système de sauvegarde
+    function saveGame() {
+      const gameData = {
+        totalJokersDefeated,
+        maxCombo,
+        currentJoker,
+        lastPlayed: Date.now()
+      };
+      
+      localStorage.setItem('jokerGameSave', JSON.stringify(gameData));
+      
+      // Afficher l'indicateur de sauvegarde
+      saveIndicator.textContent = "Sauvegarde réussie!";
+      saveIndicator.classList.add('show');
+      
+      setTimeout(() => {
+        saveIndicator.classList.remove('show');
+      }, 2000);
+    }
+
+    function loadGame() {
+      const savedData = localStorage.getItem('jokerGameSave');
+      
+      if (savedData) {
+        try {
+          const gameData = JSON.parse(savedData);
+          
+          totalJokersDefeated = gameData.totalJokersDefeated || 0;
+          maxCombo = gameData.maxCombo || 0;
+          currentJoker = gameData.currentJoker || 1;
+          
+          updateStatsDisplay();
+          updateJokerAppearance();
+          
+          console.log("Partie chargée avec succès!");
+        } catch (e) {
+          console.error("Erreur lors du chargement de la sauvegarde:", e);
+        }
+      }
+    }
+
+    function updateStatsDisplay() {
+      totalJokersElement.textContent = totalJokersDefeated;
+      maxComboElement.textContent = maxCombo;
+    }
+
+    // Système audio
+    function initAudioContext() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        return audioContext;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function createSound(frequency, duration, type = 'sine', volume = 0.15) {
+      const context = initAudioContext();
+      if (!context) return;
+
+      try {
+        const oscillator = context.createOscillator();
+        const gainNode = context.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(context.destination);
+        
+        oscillator.frequency.value = frequency;
+        oscillator.type = type;
+        
+        gainNode.gain.setValueAtTime(volume, context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + duration);
+        
+        oscillator.start(context.currentTime);
+        oscillator.stop(context.currentTime + duration);
+      } catch (e) {
+        // Silence en cas d'erreur
+      }
+    }
+
+    function playHitSound() {
+      createSound(600, 0.1, 'square');
+      setTimeout(() => createSound(300, 0.05, 'triangle'), 50);
+    }
+
+    function playCrackSound() {
+      createSound(250, 0.3, 'sawtooth');
+      setTimeout(() => createSound(180, 0.2, 'sawtooth'), 100);
+    }
+
+    function playBreakSound() {
+      createSound(120, 0.5, 'sawtooth');
+      setTimeout(() => createSound(350, 0.3, 'square'), 100);
+      setTimeout(() => createSound(650, 0.2, 'sine'), 200);
+    }
+
+    // Fonction pour créer une hache animée
+    function createAxe() {
+      const axe = document.createElement('div');
+      axe.className = 'axe';
+      
+      // Utiliser l'image de la hache fournie
+      axe.style.backgroundImage = "url('https://i.ibb.co/bR7Dg53p/large-9267279-Photoroom.png')";
+      axe.style.backgroundSize = "contain";
+      axe.style.backgroundRepeat = "no-repeat";
+      axe.style.backgroundPosition = "center";
+      axe.style.width = "80px";
+      axe.style.height = "80px";
+      
+      // Positionner la hache au-dessus du Joker
+      const jokerRect = joker.getBoundingClientRect();
+      const containerRect = joker.parentElement.getBoundingClientRect();
+      
+      axe.style.left = (jokerRect.left + jokerRect.width/2 - containerRect.left) + 'px';
+      axe.style.top = (jokerRect.top - containerRect.top) + 'px';
+      
+      joker.parentElement.appendChild(axe);
+      
+      return axe;
+    }
+
+    // Fonction pour animer la hache
+    function animateAxe() {
+      const axe = createAxe();
+      axe.classList.add('axe-hit');
+      
+      // Supprimer la hache après l'animation
+      setTimeout(() => {
+        if (axe.parentElement) {
+          axe.parentElement.removeChild(axe);
+        }
+      }, 600);
+    }
+
+    // Fonction pour créer des particules d'impact
+    function createHitParticles() {
+      for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const jokerRect = joker.getBoundingClientRect();
+        const containerRect = joker.parentElement.getBoundingClientRect();
+        
+        particle.style.left = (jokerRect.left + jokerRect.width/2 - containerRect.left + (Math.random() * 60 - 30)) + 'px';
+        particle.style.top = (jokerRect.top + jokerRect.height/2 - containerRect.top + (Math.random() * 60 - 30)) + 'px';
+        
+        // Couleurs des particules (violet et vert pour le Joker)
+        const colors = ['#800080', '#4B0082', '#32CD32', '#9ACD32'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        particlesContainer.appendChild(particle);
+        
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 30 + Math.random() * 40;
+        
+        particle.animate([
+          {
+            transform: 'scale(1)',
+            opacity: 1
+          },
+          {
+            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+            opacity: 0
+          }
+        ], {
+          duration: 500 + Math.random() * 300,
+          easing: 'ease-out'
+        }).onfinish = () => particle.remove();
+      }
+    }
+
+    function createImpactEffect() {
+      const effect = document.createElement('div');
+      effect.className = 'impact-effect';
+      effect.textContent = impactEffects[Math.floor(Math.random() * impactEffects.length)];
+      effect.style.left = (Math.random() * 70 + 15) + '%';
+      effect.style.top = (Math.random() * 50 + 25) + '%';
+      
+      document.querySelector('.log-container').appendChild(effect);
+      
+      setTimeout(() => {
+        effect.remove();
+      }, 1000);
+    }
+
+    function updateCombo() {
+      const currentTime = Date.now();
+      if (currentTime - lastHitTime > 2000) {
+        combo = 0;
+      }
+      combo++;
+      lastHitTime = currentTime;
+      
+      if (combo > maxCombo) {
+        maxCombo = combo;
+        updateStatsDisplay();
+      }
+      
+      if (combo >= 3) {
+        comboIndicator.textContent = `COMBO x${combo}`;
+        comboIndicator.style.display = 'block';
+      }
+    }
+
+    // Fonction d'attaque
+    function attack() {
+      if (currentHP <= 0 || isAttacking) return;
+      
+      isAttacking = true;
+      
+      let hits = attackMode;
+      let actualHits = 0;
+      let coinsEarned = 0;
+      let wasCracked = joker.classList.contains('cracked');
+      
+      // Animer la hache
+      animateAxe();
+      
+      playHitSound();
+      createHitParticles();
+      createImpactEffect();
+      updateCombo();
+      
+      let animationType = 'hit';
+      let shakeType = 'screen-shake';
+      let animationDuration = 400;
+      
+      if (attackMode >= 1000) {
+        animationType = 'ultra-hit';
+        shakeType = 'ultra-shake';
+        animationDuration = 1200;
+      } else if (attackMode >= 500) {
+        animationType = 'mega-hit';
+        shakeType = 'mega-shake';
+        animationDuration = 1000;
+      } else if (attackMode >= 100) {
+        animationType = 'critical-hit';
+        shakeType = 'mega-shake';
+        animationDuration = 800;
+      } else if (attackMode >= 30) {
+        animationType = 'heavy-hit';
+        animationDuration = 600;
+      } else if (attackMode >= 10) {
+        animationType = 'heavy-hit';
+        animationDuration = 600;
+      }
+
+      joker.classList.add(animationType);
+      if (shakeType) gameContainer.classList.add(shakeType);
+      
+      for (let i = 0; i < hits && currentHP > 0; i++) {
+        coupCounter++;
+        actualHits++;
+        totalHits++;
+
+        // 1 coup = -1 point de vie
+        currentHP--;
+
+        hitsUntilCoin--;
+        if (hitsUntilCoin <= 0) {
+          coinsEarnedThisLog++;
+          coinsEarned++;
+          hitsUntilCoin = 4;
+        }
+      }
+      
+      if (coinsEarned > 0) {
+        showCoinGain(coinsEarned);
+      }
+      
+      updateUI();
+      updateStatsDisplay();
+      
+      // Sauvegarde automatique après chaque attaque
+      setTimeout(saveGame, 500);
+      
+      if (!wasCracked && joker.classList.contains('cracked')) {
+        playCrackSound();
+      }
+      
+      setTimeout(() => {
+        joker.classList.remove(animationType);
+        if (shakeType) gameContainer.classList.remove(shakeType);
+        isAttacking = false;
+        
+        if (currentHP <= 0) {
+          endGame();
+        }
+      }, animationDuration);
+    }
+
+    function showCoinGain(amount) {
+      const coinDisplay = document.createElement('div');
+      coinDisplay.className = 'coins-display';
+      coinDisplay.textContent = `+${amount} 🪙`;
+      joker.parentElement.appendChild(coinDisplay);
+      
+      setTimeout(() => {
+        coinDisplay.remove();
+      }, 1000);
+    }
+
+    function updateUI() {
+      if (currentHP === 0) {
+        joker.className = "joker broken " + currentDifficulty;
+        damageWarning.style.display = "none";
+        damageWarningShown = false;
+      } else {
+        // MODIFICATION: Passer au rouge à 90% des points de vie RESTANTS
+        const healthPercentage = currentHP / maxHP;
+        
+        if (healthPercentage <= 0.9) {
+          // À 90% de points de vie restants ou moins, passer au rouge (difficulté "hard")
+          joker.className = "joker hard";
+          
+          // Afficher l'avertissement de dégâts si ce n'est pas déjà fait
+          if (!damageWarningShown) {
+            damageWarning.style.display = "block";
+            damageWarningShown = true;
+          }
+        } else if (maxHP - currentHP >= maxHP * 0.7) {
+          joker.classList.add("cracked");
+        } else {
+          joker.className = "joker " + currentDifficulty;
+          joker.classList.remove("cracked");
+          damageWarning.style.display = "none";
+          damageWarningShown = false;
+        }
+      }
+    }
+
+    function endGame() {
+      let recompense = 0;
+      let rewardText = "";
+      let victoryText = "";
+      let rewardImg = "";
+      
+      // Déterminer la récompense selon la difficulté
+      switch(currentDifficulty) {
+        case "noob":
+          recompense = 300; // 300 pièces
+          rewardText = "300 pièces d'or !";
+          victoryText = "Bravo ! Tu as gagné tes premières pièces !";
+          rewardImg = "https://i.ibb.co/gFMBxFzP/IMG-6063.png";
+          break;
+        case "buchette":
+          recompense = 1; // Galaxie
+          rewardText = "vous avez gagnez une galaxie !";
+          victoryText = "Incroyable ! Tu as découvert une galaxie entière !";
+          rewardImg = "https://i.ibb.co/JMPfpWV/IMG-5851.png";
+          break;
+        case "easy":
+          recompense = 3000; // 3000 pièces
+          rewardText = "Vous avez gagné 3000 pièces !";
+          victoryText = "Félicitations ! Tu as remporté un superbe trésor !";
+          rewardImg = "https://i.ibb.co/p6s7HT5n/IMG-7322.png";
+          break;
+        case "medium":
+          recompense = 5000; // 5000 pièces
+          rewardText = "Vous avez gagné 5000 pièces !";
+          victoryText = "Incroyable ! Tu as trouvé un trésor précieux !";
+          rewardImg = "https://i.ibb.co/hxXnkQh7/IMG-5861.png";
+          break;
+        case "hard":
+          recompense = 10000; // 10000 pièces
+          rewardText = "Vous avez gagné 10000 pièces !";
+          victoryText = "Victoire totale ! Tu as remporté le jackpot !";
+          rewardImg = "https://i.ibb.co/DHBNtX7t/IMG-6573.png";
+          break;
+      }
+      
+      // Ajouter les récompenses
+      totalJokersDefeated++;
+      
+      playBreakSound();
+      
+      setTimeout(() => {
+        rewardImage.style.backgroundImage = `url('${rewardImg}')`;
+        
+        // Message de victoire clair et épuré
+        coinsResult.innerHTML = `
+          <div class="difficulty-badge ${currentDifficulty}">NIVEAU ${currentDifficulty.toUpperCase()}</div><br>
+          <strong>RÉCOMPENSE :</strong><br>
+          ${rewardText}
+        `;
+        
+        victoryMessage.textContent = victoryText;
+        
+        resultContainer.classList.remove("hidden");
+        
+        // Sauvegarder après la victoire
+        saveGame();
+      }, 500);
+      
+      comboIndicator.style.display = "none";
+      damageWarning.style.display = "none";
+      damageWarningShown = false;
+    }
+
+    function setAttackMode(mode) {
+      attackMode = mode;
+      
+      document.querySelectorAll('.attack-mode-image').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      const btnEl = document.getElementById(`mode${mode}`);
+      if (btnEl) btnEl.classList.add('active');
+
+      attackBtn.textContent = `Attaquer (${mode} coup${mode > 1 ? 's' : ''})`;
+    }
+
+    function setDifficulty(difficulty) {
+      currentDifficulty = difficulty;
+      
+      // Mettre à jour l'apparence des boutons de difficulté
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('active');
+      
+      // Mettre à jour l'apparence du Joker
+      updateJokerAppearance();
+      
+      // Mettre à jour l'indicateur de difficulté
+      const difficultyNames = {
+        noob: "Noob",
+        buchette: "Buchette",
+        easy: "Facile",
+        medium: "Moyen",
+        hard: "Difficile"
+      };
+      
+      difficultyIndicator.textContent = `Niveau ${difficultyNames[difficulty]}`;
+      difficultyIndicator.className = `difficulty-indicator ${difficulty}`;
+      
+      // Réinitialiser le jeu avec la nouvelle difficulté
+      initGame();
+    }
+
+    function setJokerAppearance(jokerIndex) {
+      currentJoker = jokerIndex;
+      
+      // Mettre à jour l'apparence des boutons de Joker
+      document.querySelectorAll('.joker-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`.joker-btn[data-joker="${jokerIndex}"]`).classList.add('active');
+      
+      // Mettre à jour l'apparence du Joker
+      updateJokerAppearance();
+      
+      // Sauvegarder le choix
+      saveGame();
+    }
+
+    function updateJokerAppearance() {
+      joker.style.backgroundImage = `url('${jokerGifs[currentJoker - 1]}')`;
+      joker.className = "joker " + currentDifficulty;
+    }
+
+    function initGame() {
+      // Définir les points de vie selon la difficulté
+      switch(currentDifficulty) {
+        case "noob":
+          maxHP = 1500;
+          break;
+        case "buchette":
+          maxHP = 5000;
+          break;
+        case "easy":
+          maxHP = 15000;
+          break;
+        case "medium":
+          maxHP = 25000;
+          break;
+        case "hard":
+          maxHP = 50000;
+          break;
+      }
+      
+      currentHP = maxHP;
+      coupCounter = 0;
+      totalHits = 0;
+      hitsUntilCoin = 4;
+      coinsEarnedThisLog = 0;
+      combo = 0;
+      lastHitTime = 0;
+      isAttacking = false;
+      damageWarningShown = false;
+      
+      updateJokerAppearance();
+      
+      // Masquer l'avertissement de dégâts
+      damageWarning.style.display = 'none';
+      
+      // Mettre à jour l'interface
+      updateUI();
+      
+      resultContainer.classList.add("hidden");
+      comboIndicator.style.display = "none";
+    }
+
+    // Événements
+    document.getElementById("attackBtn").addEventListener("click", attack);
+    document.getElementById("resetBtn").addEventListener("click", initGame);
+    document.getElementById("saveBtn").addEventListener("click", saveGame);
+    document.getElementById("continueBtn").addEventListener("click", () => {
+      resultContainer.classList.add("hidden");
+      initGame();
+    });
+
+    document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
+    document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
+    document.getElementById("mode30").addEventListener("click", () => setAttackMode(30));
+    document.getElementById("mode100").addEventListener("click", () => setAttackMode(100));
+    document.getElementById("mode500").addEventListener("click", () => setAttackMode(500));
+    document.getElementById("mode1000").addEventListener("click", () => setAttackMode(1000));
+
+    // Sélecteur de difficulté
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        setDifficulty(this.getAttribute('data-difficulty'));
+      });
+    });
+
+    // Sélecteur d'apparence du Joker
+    document.querySelectorAll('.joker-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        setJokerAppearance(parseInt(this.getAttribute('data-joker')));
+      });
+    });
+
+    // Raccourcis clavier
+    document.addEventListener('keydown', (e) => {
+      if (isAttacking) return;
+      
+      switch(e.key) {
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          attack();
+          break;
+        case '1':
+          setAttackMode(1);
+          break;
+        case '2':
+          setAttackMode(10);
+          break;
+        case '3':
+          setAttackMode(30);
+          break;
+        case '4':
+          setAttackMode(100);
+          break;
+        case '5':
+          setAttackMode(500);
+          break;
+        case '6':
+          setAttackMode(1000);
+          break;
+        case 'r':
+        case 'R':
+          initGame();
+          break;
+        case 'n':
+        case 'N':
+          setDifficulty('noob');
+          break;
+        case 'b':
+        case 'B':
+          setDifficulty('buchette');
+          break;
+        case 'e':
+        case 'E':
+          setDifficulty('easy');
+          break;
+        case 'm':
+        case 'M':
+          setDifficulty('medium');
+          break;
+        case 'd':
+        case 'D':
+          setDifficulty('hard');
+          break;
+        case 's':
+        case 'S':
+          if (e.ctrlKey) {
+            e.preventDefault();
+            saveGame();
+          }
+          break;
+      }
+    });
+
+    // Reset combo après inactivité
+    setInterval(() => {
+      const currentTime = Date.now();
+      if (currentTime - lastHitTime > 3000 && combo > 0) {
+        combo = 0;
+        comboIndicator.style.display = "none";
+      }
+    }, 1000);
+
+    // Sauvegarde automatique toutes les 30 secondes
+    setInterval(saveGame, 30000);
+
+    // Sauvegarde automatique quand l'utilisateur quitte la page
+    window.addEventListener('beforeunload', saveGame);
+
+    // Initialisation du jeu
+    loadGame();
+    initGame();
+  </script>
+</body>
+</html>
